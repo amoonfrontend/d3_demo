@@ -56,7 +56,7 @@ class SpiderTier {
       console.log('Tier: %s; Point: %s;', this.tierNum, object.number);
       let index = (this.tierNum - 1) * this.segments + object.number;
       var name = 'NULL';
-      if (index <= this.canvas.data.length) {
+      if (this.canvas.data && index <= this.canvas.data.length) {
         let user = this.canvas.data[index - 1];
         name = user.name;
       }
@@ -132,7 +132,7 @@ class Canvas {
       height: height,
       tierR: 30,
       r: width /2,
-      segments: 8
+      segments: 12
     };
     this.scene = d3.select('#spider');
     this.svg = this.scene.append('svg').style('width', width + 'px').style('height', height + 'px').style('color', '#000');
