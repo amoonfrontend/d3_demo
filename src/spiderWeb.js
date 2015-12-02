@@ -1,5 +1,8 @@
 import d3 from 'd3';
 import d3tip from 'd3-tip';
+
+import Dashednet from './dashednet';
+
 import './spiderWeb.css';
 
 class SpiderTier {
@@ -132,8 +135,11 @@ class Canvas {
       height: height,
       tierR: 30,
       r: width /2,
-      segments: 12
+      segments: 12,
+      defaultTierR: 30,
+      defaultTiers: 10
     };
+    this.posititions = this.posititionGenerator();
     this.scene = d3.select('#spider');
     this.svg = this.scene.append('svg').style('width', width + 'px').style('height', height + 'px').style('color', '#000');
     this.bundle = this.svg.append('g').attr('transform', 'translate(' + width / 2 + ', ' + height / 2 + ')');
@@ -150,6 +156,70 @@ class Canvas {
     this.tiers = [];
     this.currentTier = undefined;
     this.createTip();
+
+    this.test();
+  }
+
+  test () {
+    this.bashednetGenerator();
+  }
+
+  /**
+   * Get all the posititions for the spider web.
+   */
+  posititionGenerator () {
+    // Default posititions
+    var posititions = {
+      center : {x: 0, y: 0},
+      branchs : [],
+      nodes: []
+    };
+
+
+    // Get branch top positition
+    for (let i = 0; i < this.info.segments; i ++) {
+      let theta = ((2 * Math.PI) / this.info.segments) * i;
+      let branchPosi = {
+        x: this.info.r * Math.cos(theta),
+        y: this.info.r * Math.sin(theta),
+      };
+      posititions.branchs.push(branchPosi);
+    }
+
+    /**
+     * Get node from net.
+     *
+     *   [
+     *       [{}, {}, {}, {}, {}, {}, {}, {}]
+     *
+     *       this.info.defaultTiers
+     *
+     *       [{}, {}, {}, {}, {}, {}, {}, {}]
+     *   ]
+     */
+    var tiers = ( this.info.r - this.info.defaultTierR) / this.info.tierR;
+    for (let i = 0; i < tiers; i ++) {
+      var tierPosi = [];
+      var tierR = this.info.tierR * i + this.info.defaultTierR;
+      for (let j = 0; j < this.info.segments; j ++) {
+        let theta = ((2 * Math.PI) / this.info.segments) * j;
+        let nodePosi = {
+          x: tierR * Math.cos(theta),
+          y: tierR * Math.sin(theta),
+        };
+        tierPosi.push(nodePosi);
+      }
+      posititions.nodes.push(tierPosi);
+    }
+    return posititions;
+  }
+
+  /*
+   * Draw the bashed net
+   */
+  bashednetGenerator () {
+    var dashednet = new Dashednet(this);
+    return dashednet;
   }
 
   dataLoader (data) {

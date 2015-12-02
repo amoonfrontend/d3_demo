@@ -31,3 +31,11 @@
   stroke: #8BABC5;
   fill: #483D3D;
 }
+
+polyline {
+  fill: none;
+  stroke: #BBC2CC;
+  stroke-width: 2px;
+  stroke-dasharray: 5px;
+  opacity: 0.5;
+}
