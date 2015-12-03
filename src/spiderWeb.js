@@ -141,27 +141,17 @@ class Canvas {
     };
     this.posititions = this.posititionGenerator();
     this.scene = d3.select('#spider');
-    this.svg = this.scene.append('svg').style('width', width + 'px').style('height', height + 'px').style('color', '#000');
-    this.bundle = this.svg.append('g').attr('transform', 'translate(' + width / 2 + ', ' + height / 2 + ')');
-    var x = d3.scale.linear()
-    .domain([0, width])
-    .range([0, width]);
+    this.svg = this.scene.append('svg')
+      .style('width', width + 'px').style('height', height + 'px').style('color', '#000');
 
-    var y = d3.scale.linear()
-    .domain([0, height])
-    .range([height, 0]);
+  }
 
-    this.bundle.call(d3.behavior.zoom().x(x).y(y).scaleExtent([1, 8]).on('zoom', () => {
-    }));
+  creator () {
+    this.bundle = this.svg.append('g')
+      .attr('transform', 'translate(' + this.info.width / 2 + ', ' + this.info.height / 2 + ')');
     this.tiers = [];
     this.currentTier = undefined;
     this.createTip();
-
-    this.test();
-  }
-
-  test () {
-    this.bashednetGenerator();
   }
 
   /**
@@ -218,8 +208,8 @@ class Canvas {
    * Draw the bashed net
    */
   bashednetGenerator () {
-    var dashednet = new Dashednet(this);
-    return dashednet;
+    this.dashednet = new Dashednet(this);
+    this.dashednet.dashedCreator();
   }
 
   dataLoader (data) {
@@ -269,6 +259,15 @@ class Canvas {
     for ( let i = 0; i < num; i ++) {
       this.addNode();
     }
+  }
+
+  gotNodePositition (tier, number) {
+    if (tier < 0) {
+      return {x: 0, y: 0};
+    }
+
+    let positions = this.posititions.nodes;
+    return positions[tier][number];
   }
 
   removeNode () {

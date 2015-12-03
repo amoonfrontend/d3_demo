@@ -3,6 +3,8 @@ import Canvas from './src/spiderWeb';
 import $ from 'jquery';
 
 var canvas = new Canvas('spider', 600, 600);
+canvas.bashednetGenerator();
+canvas.creator();
 //canvas.createBranch();
 canvas.createCenter();
 

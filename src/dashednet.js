@@ -4,9 +4,19 @@
 class Dashednet {
   constructor (canvas) {
     this.canvas = canvas;
-    this.bundle = this.bundleCreator();
+    this.dashedBranchBundle = undefined;
+    this.dashedTierBundle = undefined;
+  }
+
+  dashedCreator () {
+    this.dashedBranchBundle = this.bundleCreator();
     this.dashedBranchCreator();
+
+    this.dashedTierBundle = this.bundleCreator();
     this.dashedTierCreator();
+
+    this.dashedPointBundle = this.bundleCreator();
+    this.dashedPointCreator();
   }
 
   bundleCreator () {
@@ -20,7 +30,7 @@ class Dashednet {
 
   dashedBranchCreator () {
     let branchPosititions = this.canvas.posititions.branchs;
-    this.bundle.selectAll('polyline').data(branchPosititions)
+    this.dashedBranchBundle.selectAll('polyline').data(branchPosititions)
       .enter()
       .append('polyline')
       .attr('points', (d) => {
@@ -30,8 +40,24 @@ class Dashednet {
 
   dashedTierCreator () {
     let nodePosititions = this.canvas.posititions.nodes;
-    var bundle = this.bundleCreator();
-    bundle.selectAll('polyline').data(nodePosititions)
+    // var lines = [];
+    // for (var tierPositions of nodePosititions) {
+    //   var prevPosition = tierPositions[0];
+    //   var isFisrt = true;
+    //   for (let position of tierPositions) {
+    //     if (!isFisrt) {
+    //       let line = this.lineCreator(prevPosition, position);
+    //       prevPosition = position;
+    //       lines.push(line);
+    //     } else {
+    //       isFisrt = false;
+    //     }
+    //   }
+    //   let line = this.lineCreator(tierPositions[0], tierPositions[tierPositions.length - 1]);
+    //   lines.push(line);
+    // }
+
+    this.dashedTierBundle.selectAll('polyline').data(nodePosititions)
       .enter()
       .append('polyline')
       .attr('points', function (d){
@@ -42,6 +68,36 @@ class Dashednet {
         positions.push([d[0].x, d[0].y]);
         return positions;
       });
+  }
+
+  lineCreator (prevPosition, position) {
+    let line = {
+      one: prevPosition,
+      two: position,
+      path: this.dashedBranchBundle.append('polyline')
+              .attr('points', [[prevPosition.x, prevPosition.y], 
+                               [position.x, position.y]])
+    };
+    return line;
+  }
+
+  dashedPointCreator () {
+    let nodePosititions = this.canvas.posititions.nodes;
+    var allPosititions = [];
+    for (let pos of nodePosititions){
+      allPosititions = allPosititions.concat(pos);
+    }
+    this.dashedPointBundle.selectAll('circle').data(allPosititions)
+      .enter()
+      .append('circle')
+      .attr('class', 'dashednet-Point')
+      .attr('cx', (d) => {
+        return d.x;
+      })
+      .attr('cy', (d) => {
+        return d.y;
+      })
+      .attr('r', 5);
   }
 }
 
