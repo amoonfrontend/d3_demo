@@ -187,8 +187,8 @@ class Canvas {
      *       [{}, {}, {}, {}, {}, {}, {}, {}]
      *   ]
      */
-    var tiers = ( this.info.r - this.info.defaultTierR) / this.info.tierR;
-    for (let i = 0; i < tiers; i ++) {
+    this.info.tiers = ( this.info.r - this.info.defaultTierR) / this.info.tierR;
+    for (let i = 0; i < this.info.tiers; i ++) {
       var tierPosi = [];
       var tierR = this.info.tierR * i + this.info.defaultTierR;
       for (let j = 0; j < this.info.segments; j ++) {
