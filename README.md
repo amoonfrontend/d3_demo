@@ -24,3 +24,9 @@ public static void main(String[] args){
   System.out.print("Test");
 }
 ```
+
+```lua
+for  i =0, 10, 1
+  print(i)
+end
+```
