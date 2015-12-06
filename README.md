@@ -12,3 +12,9 @@ When `git clone` the code, `cd d3_demo` and `npm install`. finially, Use `npm ru
 
 In browser, enter url `http://localhsot:8080`, you will see this demo on browser.
 >>>>>>> origin/master
+
+```javascript
+for (var i = 0; i < 10; i ++ ){
+  console.log(i);
+}
+```
