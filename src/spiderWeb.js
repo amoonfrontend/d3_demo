@@ -143,7 +143,7 @@ class Canvas {
     this.scene = d3.select('#spider');
     this.svg = this.scene.append('svg')
       .style('width', width + 'px').style('height', height + 'px').style('color', '#000');
-
+    this.createTip();
   }
 
   creator () {
@@ -151,7 +151,6 @@ class Canvas {
       .attr('transform', 'translate(' + this.info.width / 2 + ', ' + this.info.height / 2 + ')');
     this.tiers = [];
     this.currentTier = undefined;
-    this.createTip();
   }
 
   /**
@@ -208,13 +207,13 @@ class Canvas {
    * Draw the bashed net
    */
   bashednetGenerator () {
-    this.dashednet = new Dashednet(this);
-    this.dashednet.dashedCreator();
+    let dashednet = new Dashednet(this);
+    dashednet.dashedCreator();
+    return dashednet;
   }
 
   dataLoader (data) {
     this.data = data;
-    this.addNodes(data.length);
   }
 
   createCenter () {
