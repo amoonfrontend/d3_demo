@@ -18,3 +18,9 @@ for (var i = 0; i < 10; i ++ ){
   console.log(i);
 }
 ```
+
+```java
+public static void main(String[] args){
+  System.out.print("Test");
+}
+```
