@@ -5,104 +5,104 @@ import Dashednet from './dashednet';
 
 import './spiderWeb.css';
 
-class SpiderTier {
-  constructor (canvas, tierNum, segments){
-    this.canvas = canvas;
-    this.r = this.canvas.info.tierR * tierNum;
-    this.tierNum = tierNum;
-    this.segments = segments;
-    this.points = [];
-    this.currentPoint = undefined;
-    this.firstPoint = undefined;
-  }
+// class SpiderTier {
+//   constructor (canvas, tierNum, segments){
+//     this.canvas = canvas;
+//     this.r = this.canvas.info.tierR * tierNum;
+//     this.tierNum = tierNum;
+//     this.segments = segments;
+//     this.points = [];
+//     this.currentPoint = undefined;
+//     this.firstPoint = undefined;
+//   }
 
-  addPoint () {
-    let theta = ((2 * Math.PI) / this.segments) * this.points.length;
-    let point = {
-      x: this.r * Math.cos(theta),
-      y: this.r * Math.sin(theta),
-    };
+//   addPoint () {
+//     let theta = ((2 * Math.PI) / this.segments) * this.points.length;
+//     let point = {
+//       x: this.r * Math.cos(theta),
+//       y: this.r * Math.sin(theta),
+//     };
 
-    if (this.currentPoint) {
-      point.prevPoint = this.currentPoint;
-      this.connectNodes(point);
-    } else {
-      this.firstPoint = point;
-    }
+//     if (this.currentPoint) {
+//       point.prevPoint = this.currentPoint;
+//       this.connectNodes(point);
+//     } else {
+//       this.firstPoint = point;
+//     }
 
-    this.points.push(point);
-    this.currentPoint = point;
+//     this.points.push(point);
+//     this.currentPoint = point;
 
-    if (this.fullNode()){
-      this.firstPoint.prevPoint = this.currentPoint;
-      this.connectNodes(this.firstPoint);
-    }
+//     if (this.fullNode()){
+//       this.firstPoint.prevPoint = this.currentPoint;
+//       this.connectNodes(this.firstPoint);
+//     }
 
-    var bundle = this.canvas.bundle;
-    point.point = bundle.append('circle')
-      .attr('cx', point.x)
-      .attr('cy', point.y)
-      .attr('class', 'node-point')
-      .attr('r', 5);
+//     var bundle = this.canvas.bundle;
+//     point.point = bundle.append('circle')
+//       .attr('cx', point.x)
+//       .attr('cy', point.y)
+//       .attr('class', 'node-point')
+//       .attr('r', 5);
 
-    point.number = this.points.length;
-    this.addTip(point.point);
-    this.clickEventListener(point.point, point);
-  }
+//     point.number = this.points.length;
+//     this.addTip(point.point);
+//     this.clickEventListener(point.point, point);
+//   }
 
-  addTip(element){
-    this.canvas.tip && element.call(this.canvas.tip);
-  }
+//   addTip(element){
+//     this.canvas.tip && element.call(this.canvas.tip);
+//   }
 
-  clickEventListener (element, object) {
-    element.on('click', () => {
-      console.log('Tier: %s; Point: %s;', this.tierNum, object.number);
-      let index = (this.tierNum - 1) * this.segments + object.number;
-      var name = 'NULL';
-      if (this.canvas.data && index <= this.canvas.data.length) {
-        let user = this.canvas.data[index - 1];
-        name = user.name;
-      }
-      this.canvas.tip && () => {
-        this.canvas.tip.html('<strong>Name: </strong>' + name + ';<br><strong>Tier: </strong>' + this.tierNum + '; <strong>Point: </strong>' + object.number + ';');
-        this.canvas.tip.show();
-      }();
-    });
-  }
+//   clickEventListener (element, object) {
+//     element.on('click', () => {
+//       console.log('Tier: %s; Point: %s;', this.tierNum, object.number);
+//       let index = (this.tierNum - 1) * this.segments + object.number;
+//       var name = 'NULL';
+//       if (this.canvas.data && index <= this.canvas.data.length) {
+//         let user = this.canvas.data[index - 1];
+//         name = user.name;
+//       }
+//       this.canvas.tip && () => {
+//         this.canvas.tip.html('<strong>Name: </strong>' + name + ';<br><strong>Tier: </strong>' + this.tierNum + '; <strong>Point: </strong>' + object.number + ';');
+//         this.canvas.tip.show();
+//       }();
+//     });
+//   }
 
-  removePoint () {
-    if (this.currentPoint.point){
-      this.currentPoint.point.remove();
-    }
-    if (this.currentPoint.path){
-      this.currentPoint.path.remove();
-    }
-    if (this.fullNode()) {
-      this.firstPoint.path.remove();
-    }
+//   removePoint () {
+//     if (this.currentPoint.point){
+//       this.currentPoint.point.remove();
+//     }
+//     if (this.currentPoint.path){
+//       this.currentPoint.path.remove();
+//     }
+//     if (this.fullNode()) {
+//       this.firstPoint.path.remove();
+//     }
 
-    this.points.pop();
-    if (!this.nullNode()) {
-      let lastPoint = this.points[this.points.length - 1];
-      this.currentPoint = lastPoint;
-    }
-  }
+//     this.points.pop();
+//     if (!this.nullNode()) {
+//       let lastPoint = this.points[this.points.length - 1];
+//       this.currentPoint = lastPoint;
+//     }
+//   }
 
-  fullNode () {
-    return this.points.length >= this.segments;
-  }
+//   fullNode () {
+//     return this.points.length >= this.segments;
+//   }
 
-  nullNode () {
-    return this.points.length === 0;
-  }
+//   nullNode () {
+//     return this.points.length === 0;
+//   }
 
-  connectNodes (point) {
-    let bundle = this.canvas.bundle;
-    point.path = bundle.append('path')
-        .attr('d', 'M ' + point.x + ' ' + point.y + ' L ' + point.prevPoint.x + ' ' + point.prevPoint.y)
-        .style('stroke', 'rgb(142, 135, 135)');
-  }
-}
+//   connectNodes (point) {
+//     let bundle = this.canvas.bundle;
+//     point.path = bundle.append('path')
+//         .attr('d', 'M ' + point.x + ' ' + point.y + ' L ' + point.prevPoint.x + ' ' + point.prevPoint.y)
+//         .style('stroke', 'rgb(142, 135, 135)');
+//   }
+// }
 
 class SpiderBranch {
   constructor (canvas, r, segments) {
@@ -243,48 +243,48 @@ class Canvas {
       });
   }
 
-  addNode () {
-    if (this.currentTier === undefined || this.currentTier.fullNode()) {
-      let tier = new SpiderTier(this, this.tiers.length + 1, this.info.segments);
-      this.tiers.push(tier);
-      this.currentTier = tier;
-    }
+  // addNode () {
+  //   if (this.currentTier === undefined || this.currentTier.fullNode()) {
+  //     let tier = new SpiderTier(this, this.tiers.length + 1, this.info.segments);
+  //     this.tiers.push(tier);
+  //     this.currentTier = tier;
+  //   }
 
-    this.currentTier.addPoint();
-  }
+  //   this.currentTier.addPoint();
+  // }
 
-  addNodes (num) {
-    num = num > 1 ? num : 1;
-    for ( let i = 0; i < num; i ++) {
-      this.addNode();
-    }
-  }
+  // addNodes (num) {
+  //   num = num > 1 ? num : 1;
+  //   for ( let i = 0; i < num; i ++) {
+  //     this.addNode();
+  //   }
+  // }
 
-  gotNodePositition (tier, number) {
-    if (tier < 0) {
-      return {x: 0, y: 0};
-    }
+  // gotNodePositition (tier, number) {
+  //   if (tier < 0) {
+  //     return {x: 0, y: 0};
+  //   }
 
-    let positions = this.posititions.nodes;
-    return positions[tier][number];
-  }
+  //   let positions = this.posititions.nodes;
+  //   return positions[tier][number];
+  // }
 
-  removeNode () {
-    if (this.currentTier === undefined) {
-      return;
-    }
-    this.currentTier.removePoint();
-    console.log(this.currentTier.nullNode());
-    console.log(this.tiers.length);
-    if (this.currentTier.nullNode()) {
-      this.tiers.pop();
-      console.log(this.tiers.length);
-      this.currentTier = this.tiers.length > 0 ? this.tiers[this.tiers.length - 1] : undefined;
-      console.log(this.currentTier);
-    }
+  // removeNode () {
+  //   if (this.currentTier === undefined) {
+  //     return;
+  //   }
+  //   this.currentTier.removePoint();
+  //   console.log(this.currentTier.nullNode());
+  //   console.log(this.tiers.length);
+  //   if (this.currentTier.nullNode()) {
+  //     this.tiers.pop();
+  //     console.log(this.tiers.length);
+  //     this.currentTier = this.tiers.length > 0 ? this.tiers[this.tiers.length - 1] : undefined;
+  //     console.log(this.currentTier);
+  //   }
 
-    console.log(this.currentTier);
-  }
+  //   console.log(this.currentTier);
+  // }
 }
 
 export default Canvas;
